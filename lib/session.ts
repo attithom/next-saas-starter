@@ -1,10 +1,12 @@
 import "server-only";
 
 import { cache } from "react";
-import { auth } from "@/auth";
+
+import { getSession } from "@/lib/auth";
 
 export const getCurrentUser = cache(async () => {
-  const session = await auth();
+  console.log("getCurrentUser");
+  const session = await getSession();
   if (!session?.user) {
     return undefined;
   }

@@ -3,8 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Check, ChevronsUpDown, Plus } from "lucide-react";
-import { useSession } from "next-auth/react";
 
+import { useSession } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
@@ -38,10 +38,10 @@ export default function ProjectSwitcher({
 }: {
   large?: boolean;
 }) {
-  const { data: session, status } = useSession();
+  const { data: session, isPending } = useSession();
   const [openPopover, setOpenPopover] = useState(false);
 
-  if (!projects || status === "loading") {
+  if (!projects || isPending) {
     return <ProjectSwitcherPlaceholder />;
   }
 
@@ -56,10 +56,7 @@ export default function ProjectSwitcher({
           >
             <div className="flex items-center space-x-3 pr-2">
               <div
-                className={cn(
-                  "size-3 shrink-0 rounded-full",
-                  selected.color,
-                )}
+                className={cn("size-3 shrink-0 rounded-full", selected.color)}
               />
               <div className="flex items-center space-x-3">
                 <span

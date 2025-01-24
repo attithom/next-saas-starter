@@ -4,7 +4,9 @@
 </a>
 
 <p align="center">
-  Start at full speed with SaaS Starter !
+  Start at full speed with SaaS Starter!
+  <br/>
+  <strong>Note: This project is still in development and not production-ready yet.</strong>
 </p>
 
 <p align="center">
@@ -24,7 +26,7 @@
 
 ## Introduction
 
-Empower your next project with the stack of Next.js 14, Prisma, Neon, Auth.js v5, Resend, React Email, Shadcn/ui, and Stripe.
+Empower your next project with the stack of Next.js 14, Prisma, Neon, Better Auth, Resend, React Email, Shadcn/ui, and Stripe.
 <br/>
 All seamlessly integrated with the SaaS Starter to accelerate your development and saas journey.
 
@@ -66,6 +68,7 @@ pnpm run dev
 > Use this command for update your project: `ncu -i --format group`
 
 ## Roadmap
+
 - [ ] Upgrade eslint to v9
 - [ ] Add resend for success subscriptions
 
@@ -76,7 +79,7 @@ https://github.com/mickasmt/next-saas-stripe-starter/assets/62285783/828a4e0f-30
 ### Frameworks
 
 - [Next.js](https://nextjs.org/) – React framework for building performant apps with the best developer experience
-- [Auth.js](https://authjs.dev/) – Handle user authentication with ease with providers like Google, Twitter, GitHub, etc.
+- [Better Auth](https://betterauth.dev/) – Handle user authentication with ease with providers like Google, Twitter, GitHub, etc.
 - [Prisma](https://www.prisma.io/) – Typescript-first ORM for Node.js
 - [React Email](https://react.email/) – Versatile email framework for efficient and flexible email development
 
@@ -117,11 +120,13 @@ https://github.com/mickasmt/next-saas-stripe-starter/assets/62285783/828a4e0f-30
 
 ## Author
 
-Created by [@miickasmt](https://twitter.com/miickasmt) in 2023, released under the [MIT license](https://github.com/shadcn/taxonomy/blob/main/LICENSE.md).
+Forked by [@atticusthomson](https://twitter.com/atticusthomson) in 2025, released under the [MIT license](https://github.com/shadcn/taxonomy/blob/main/LICENSE.md).
+
+This project is a fork of the original [Next SaaS Stripe Starter](https://github.com/mickasmt/next-saas-stripe-starter).
 
 ## Credits
 
-This project was inspired by shadcn's [Taxonomy](https://github.com/shadcn-ui/taxonomy), Steven Tey’s [Precedent](https://github.com/steven-tey/precedent), and Antonio Erdeljac's [Next 13 AI SaaS](https://github.com/AntonioErdeljac/next13-ai-saas).
+This project was inspired by shadcn's [Taxonomy](https://github.com/shadcn-ui/taxonomy), Steven Tey's [Precedent](https://github.com/steven-tey/precedent), and Antonio Erdeljac's [Next 13 AI SaaS](https://github.com/AntonioErdeljac/next13-ai-saas).
 
 - Shadcn ([@shadcn](https://twitter.com/shadcn))
 - Steven Tey ([@steventey](https://twitter.com/steventey))

@@ -17,7 +17,7 @@ export default async function BillingPage() {
   const user = await getCurrentUser();
 
   let userSubscriptionPlan;
-  if (user && user.id && user.role === "USER") {
+  if (user && user.id) {
     userSubscriptionPlan = await getUserSubscriptionPlan(user.id);
   } else {
     redirect("/login");

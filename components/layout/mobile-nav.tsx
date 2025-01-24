@@ -4,11 +4,11 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useSelectedLayoutSegment } from "next/navigation";
 import { Menu, X } from "lucide-react";
-import { useSession } from "next-auth/react";
 
 import { docsConfig } from "@/config/docs";
 import { marketingConfig } from "@/config/marketing";
 import { siteConfig } from "@/config/site";
+import { useSession } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
 import { DocsSidebarNav } from "@/components/docs/sidebar-nav";
 import { Icons } from "@/components/shared/icons";
@@ -60,21 +60,23 @@ export function NavMobile() {
         )}
       >
         <ul className="grid divide-y divide-muted">
-          {links && links.length > 0 && links.map(({ title, href }) => (
-            <li key={href} className="py-3">
-              <Link
-                href={href}
-                onClick={() => setOpen(false)}
-                className="flex w-full font-medium capitalize"
-              >
-                {title}
-              </Link>
-            </li>
-          ))}
+          {links &&
+            links.length > 0 &&
+            links.map(({ title, href }) => (
+              <li key={href} className="py-3">
+                <Link
+                  href={href}
+                  onClick={() => setOpen(false)}
+                  className="flex w-full font-medium capitalize"
+                >
+                  {title}
+                </Link>
+              </li>
+            ))}
 
           {session ? (
             <>
-              {session.user.role === "ADMIN" ? (
+              {/* {session.user.role === "ADMIN" ? (
                 <li className="py-3">
                   <Link
                     href="/admin"
@@ -84,7 +86,7 @@ export function NavMobile() {
                     Admin
                   </Link>
                 </li>
-              ) : null}
+              ) : null} */}
 
               <li className="py-3">
                 <Link

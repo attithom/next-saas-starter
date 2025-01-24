@@ -5,9 +5,10 @@ import {
   useMemo,
   useState,
 } from "react";
-import { signOut, useSession } from "next-auth/react";
+import router from "next/router";
 import { toast } from "sonner";
 
+import { signOut, useSession } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
@@ -23,7 +24,7 @@ function DeleteAccountModal({
   const { data: session } = useSession();
   const [deleting, setDeleting] = useState(false);
 
-  async function deleteAccount() {
+  const deleteAccount = useCallback(async () => {
     setDeleting(true);
     await fetch(`/api/user`, {
       method: "DELETE",
@@ -36,7 +37,11 @@ function DeleteAccountModal({
         await new Promise((resolve) =>
           setTimeout(() => {
             signOut({
-              callbackUrl: `${window.location.origin}/`,
+              fetchOptions: {
+                onSuccess: () => {
+                  router.push("/");
+                },
+              },
             });
             resolve(null);
           }, 500),
@@ -47,7 +52,7 @@ function DeleteAccountModal({
         throw error;
       }
     });
-  }
+  }, []);
 
   return (
     <Modal

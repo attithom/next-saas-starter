@@ -1,5 +1,4 @@
-import { auth } from "@/auth";
-
+import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 
 export const DELETE = auth(async (req) => {

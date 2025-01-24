@@ -1,18 +1,19 @@
 "use client";
 
-import * as React from "react";
+import { useCallback, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import router from "next/router";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import * as z from "zod";
 
+import { signIn, signUp } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
 import { userAuthSchema } from "@/lib/validations/auth";
 import { buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { toast } from "sonner";
 import { Icons } from "@/components/shared/icons";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -29,36 +30,77 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
   } = useForm<FormData>({
     resolver: zodResolver(userAuthSchema),
   });
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
-  const [isGoogleLoading, setIsGoogleLoading] = React.useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState<boolean>(false);
   const searchParams = useSearchParams();
 
-  async function onSubmit(data: FormData) {
+  const onSubmit = useCallback(async (formData: FormData) => {
     setIsLoading(true);
 
-    const signInResult = await signIn("resend", {
-      email: data.email.toLowerCase(),
-      redirect: false,
-      callbackUrl: searchParams?.get("from") || "/dashboard",
-    });
+    if (type === "register") {
+      const { data, error } = await signUp.email(
+        {
+          email: formData.email,
+          password: formData.password,
+          name: "",
+        },
+        {
+          onRequest: (ctx) => {
+            //show loading
+          },
+          onSuccess: (ctx) => {
+            //redirect to the dashboard
+            router.push("/dashboard");
+          },
+          onError: (ctx) => {
+            toast.error(ctx.error.message);
+          },
+        },
+      );
 
-    setIsLoading(false);
+      if (error) {
+        return handleError(error);
+      }
 
-    if (!signInResult?.ok) {
-      return toast.error("Something went wrong.", {
-        description: "Your sign in request failed. Please try again."
-      });
+      return handleSuccess();
+    } else {
+      const { error } = await signIn.email(
+        {
+          email: formData.email,
+          password: formData.password,
+        },
+        {
+          onSuccess: () => {
+            router.push("/dashboard");
+          },
+        },
+      );
+
+      if (error) {
+        return handleError(error);
+      }
+
+      return handleSuccess();
     }
 
-    return toast.success("Check your email", {
-      description: "We sent you a login link. Be sure to check your spam too.",
+    setIsLoading(false);
+  }, []);
+
+  function handleError(error: any) {
+    toast.error("Something went wrong.", {
+      description: "Your sign in request failed. Please try again.",
+    });
+  }
+  function handleSuccess() {
+    toast.success("Success", {
+      description: "You are now signed in.",
     });
   }
 
   return (
     <div className={cn("grid gap-6", className)} {...props}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="grid gap-2">
+        <div className="grid gap-3">
           <div className="grid gap-1">
             <Label className="sr-only" htmlFor="email">
               Email
@@ -76,6 +118,26 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
             {errors?.email && (
               <p className="px-1 text-xs text-red-600">
                 {errors.email.message}
+              </p>
+            )}
+          </div>
+          <div className="grid gap-1">
+            <Label className="sr-only" htmlFor="password">
+              Password
+            </Label>
+            <Input
+              id="password"
+              type="password"
+              autoCapitalize="none"
+              autoComplete="password"
+              autoCorrect="off"
+              placeholder="Password"
+              disabled={isLoading || isGoogleLoading}
+              {...register("password")}
+            />
+            {errors?.password && (
+              <p className="px-1 text-xs text-red-600">
+                {errors.password.message}
               </p>
             )}
           </div>
@@ -97,7 +159,7 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
           </span>
         </div>
       </div>
-      <button
+      {/* <button
         type="button"
         className={cn(buttonVariants({ variant: "outline" }))}
         onClick={() => {
@@ -112,7 +174,7 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
           <Icons.google className="mr-2 size-4" />
         )}{" "}
         Google
-      </button>
+      </button> */}
     </div>
   );
 }
